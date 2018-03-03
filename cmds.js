@@ -96,18 +96,17 @@ exports.testCmd = (rl, id) => {
         errorlog('Falta el parámetro id.');
         rl.prompt();
     } else {
-
         try {
             const quiz = model.getByIndex(id);
 
-            rl.question(`${colorize(quiz.question, 'red')}? `, answer => {
+            rl.question(`${colorize(`${quiz.question}?`, 'red')} `, answer => {
 
                 log("Su respuesta es:");
 
                 if (answer.trim().toLowerCase() === quiz.answer.trim().toLowerCase()) {
-                    biglog("Correcta", "green");
+                    biglog("Correct", "green");
                 } else {
-                    biglog("Incorrecta", "red");
+                    biglog("Incorrect", "red");
                 }
 
                 rl.prompt();
