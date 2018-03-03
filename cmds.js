@@ -100,16 +100,13 @@ exports.testCmd = (rl, id) => {
             const quiz = model.getByIndex(id);
 
             rl.question(`${colorize(`${quiz.question}?`, 'red')} `, answer => {
-
-                log("Su respuesta es:");
-
                 if (answer.trim().toLowerCase() === quiz.answer.trim().toLowerCase()) {
                     biglog("Correct", "green");
+                    rl.prompt();
                 } else {
                     biglog("Incorrect", "red");
+                    rl.prompt();
                 }
-
-                rl.prompt();
             });
         } catch (error) {
             errorlog(error.message);
