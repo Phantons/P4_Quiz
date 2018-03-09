@@ -191,7 +191,7 @@ const playOne = (rl, toBeAsked, score) => {
                     } else {
                         log("Incorrecta.");
                         log("Fin del examen. Aciertos:");
-                        biglog(score, "magenta");
+                        log(score, "magenta");
                         rl.prompt();
                     }
                 });
