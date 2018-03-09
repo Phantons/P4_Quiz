@@ -173,9 +173,10 @@ function askQuestion(rl, quiz, callback, score) {
     .then((answer) => {
         if (answer.trim().toLowerCase() === quiz.answer.trim().toLowerCase()) {
             score++;
-            log(`Correcto - Lleva ${score} aciertos.`);
+            log("Correcto");
             callback(score);
         } else {
+            log("Incorrecto");
             endOfExam(rl, score);
         }
     });
