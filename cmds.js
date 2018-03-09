@@ -172,8 +172,8 @@ function askQuestion(rl, quiz, callback, score) {
     makeQuestion(rl, `${quiz.question}? `)
     .then((answer) => {
         if (answer.trim().toLowerCase() === quiz.answer.trim().toLowerCase()) {
-            score++;
             log("Correcto");
+            score++;
             callback(score);
         } else {
             log("Incorrecto");
@@ -193,7 +193,7 @@ exports.playCmd = rl => {
 
     const playOne = (score) => {
         if (toBeResolved.length === 0) {
-            log("No hay mas preguntas", 'white');
+            //log("No hay mas preguntas");
             endOfExam(rl, score);
         } else {
             let quizToAsk = toBeResolved[Math.floor(Math.random() * toBeResolved.length)];
@@ -205,7 +205,6 @@ exports.playCmd = rl => {
     models.quiz.findAll()
         .then(quizzes => {quizzes.forEach(quiz => {toBeResolved.push(quiz);});})
         .then(() => playOne(0))
-        .then(() => rl.prompt())
         .catch(err => console.log(err));
 };
 
