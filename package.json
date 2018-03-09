@@ -5,7 +5,9 @@
   "main": "main.js",
   "dependencies": {
     "chalk": "^2.3.2",
-    "figlet": "^1.2.0"
+    "figlet": "^1.2.0",
+    "sequelize": "^4.35.2",
+    "sqlite3": "^3.1.13"
   },
   "devDependencies": {},
   "scripts": {
