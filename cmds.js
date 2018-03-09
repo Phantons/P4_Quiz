@@ -172,15 +172,14 @@ const playOne = (rl, toBeAsked, score) => {
     if (toBeAsked.length === 0) {
         log("No hay mas preguntas");
         log("Fin del examen. Aciertos:");
-        biglog(score, "magenta");
+        log(score, "magenta");
         rl.prompt();
     } else {
         let idAsk = Math.floor(Math.random()*toBeAsked.length);
 
-        try {
-            models.quiz.findById(toBeAsked[idAsk])
-            .then((quiz) => {
-                makeQuestion(rl, `${quiz.question}? `)
+        models.quiz.findById(toBeAsked[idAsk])
+        .then((quiz) => {
+            makeQuestion(rl, `${quiz.question}? `)
                 .then((answer) => {
                     log("Su respuesta es:");
 
@@ -195,13 +194,14 @@ const playOne = (rl, toBeAsked, score) => {
                         rl.prompt();
                     }
                 });
-            });
-
-            toBeAsked.splice(idAsk, 1);
-        } catch (error) {
+        })
+        .catch(error => {
             errorlog(error.message);
-            rl.prompt();
-        }
+            log("Fin del examen. Aciertos:");
+            log(score, "magenta");
+        });
+
+        toBeAsked.splice(idAsk, 1);
     }
 };
 
