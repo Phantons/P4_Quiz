@@ -168,64 +168,46 @@ exports.testCmd = (rl, id) => {
     });
 };
 
-const playOne = (rl, toBeAsked, score) => {
-    if (toBeAsked.length === 0) {
-        log("No hay mas preguntas");
-        log("Fin del examen. Aciertos:");
-        log(score, "magenta");
-        rl.prompt();
-    } else {
-        let idAsk = Math.floor(Math.random()*toBeAsked.length);
+function askQuestion(rl, quiz, callback, score) {
+    makeQuestion(rl, `${quiz.question}? `)
+    .then((answer) => {
+        if (answer.trim().toLowerCase() === quiz.answer.trim().toLowerCase()) {
+            score++;
+            log(`Correcto - Lleva ${score} aciertos.`);
+            callback(score);
+        } else {
+            endOfExam(rl, score);
+        }
+    });
+}
 
-        models.quiz.findById(toBeAsked[idAsk])
-        .then((quiz) => {
-            makeQuestion(rl, `${quiz.question}? `)
-                .then((answer) => {
-                    log("Su respuesta es:");
-
-                    if (answer.trim().toLowerCase() === quiz.answer.trim().toLowerCase()) {
-                        score++;
-                        log(`Correcto - Lleva ${score} aciertos.`);
-                        playOne(rl, toBeAsked, score);
-                    } else {
-                        log("Incorrecta.");
-                        log("Fin del examen. Aciertos:");
-                        log(score, "magenta");
-                        rl.prompt();
-                    }
-                });
-        })
-        .catch(error => {
-            errorlog(error.message);
-            log("Fin del examen. Aciertos:");
-            log(score, "magenta");
-        });
-
-        toBeAsked.splice(idAsk, 1);
-    }
-};
+function endOfExam(rl, score) {
+    log("Fin del examen. Aciertos:");
+    log(score, 'magenta');
+    rl.prompt();
+}
 
 exports.playCmd = rl => {
-    let score = 0;
+    let toBeResolved = [];
 
-    let toBeAsked = [];
-    models.quiz.findAll().each((quiz) => {
-        toBeAsked.push(quiz.id);
-    })
-    .then(() => {
-        if (toBeAsked.length === 0) {
-            errorlog("No hay ninguna pregunta");
-            rl.prompt();
+    const playOne = (score) => {
+        if (toBeResolved.length === 0) {
+            log("No hay mas preguntas", 'white');
+            endOfExam(rl, score);
         } else {
-            playOne(rl, toBeAsked, score);
-            rl.prompt();
+            let quizToAsk = toBeResolved[Math.floor(Math.random() * toBeResolved.length)];
+            toBeResolved.splice(toBeResolved.indexOf(quizToAsk), 1);
+            askQuestion(rl, quizToAsk, playOne, score);
         }
-    })
-    .catch(error => {
-        errorlog(error.message);
-        rl.prompt();
-    });
+    };
+
+    models.quiz.findAll()
+        .then(quizzes => {quizzes.forEach(quiz => {toBeResolved.push(quiz);});})
+        .then(() => playOne(0))
+        .then(() => rl.prompt())
+        .catch(err => console.log(err));
 };
+
 
 exports.creditsCmd = rl => {
     log('Autor de la práctica:');
