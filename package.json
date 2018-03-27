@@ -9,7 +9,9 @@
     "sequelize": "^4.35.2",
     "sqlite3": "^3.1.13"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "ws": "3.3.2"
+  },
   "scripts": {
     "start": "node main.js",
     "test": "echo \"Error: no test specified\" && exit 1"

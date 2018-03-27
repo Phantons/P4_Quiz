@@ -168,7 +168,7 @@ exports.testCmd = (socket, rl, id) => {
     });
 };
 
-function askQuestion(socket, quiz, callback, score) {
+function askQuestion(socket, rl, quiz, callback, score) {
     makeQuestion(rl, `${quiz.question}? `)
     .then((answer) => {
         if (answer.trim().toLowerCase() === quiz.answer.trim().toLowerCase()) {
